@@ -1,0 +1,58 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: Verdana;
+}
+#area_game {
+    margin: auto;
+    padding: 0px;
+    position: relative;
+}
+.area_game__table {
+    left: 173px;
+    top: 98px;
+}
+.area_game__table > tbody > tr > td:not(:nth-child(1)) {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background: url("../img/border.png");
+}
+.area_game__table > thead > tr > td > p,
+.area_game__table > tbody > tr > td > p {
+    color: #ccc;
+    font-size: 30px;
+    text-align: center;
+}
+#area_enemy {
+  float: left;
+}
+#area_home {
+  float: right;
+}
+#area_enemy > tbody > tr > td:not(:nth-child(1)):hover::after {
+    content: attr(data-title);
+    padding-left: 15px;
+    color: rgba(135, 204, 255, 0.72);
+}
+.ship-red {
+    background: url("../img/Sinking_Ship.png") !important;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 50px 55px, auto !important;
+    transition: 0.5s;
+}
+.ship-blue {
+    background: url("../img/Ship_logo.png") !important;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 55px 51px, auto !important;
+    transition: 0.5s;
+}
+.bomb {
+    background: url("../img/Bomb.png") !important;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 50px 55px, auto !important;
+    transition: 0.5s;
+}

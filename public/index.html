@@ -1,0 +1,324 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SeaBattle</title>
+	  <link rel="stylesheet" href="style.css">
+    <script src="socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <textarea disabled name="name" rows="8" cols="40"></textarea>
+    <p></p>
+    <input type="text" name="text" size="20">
+    <button type="button" name="button">Send</button>
+	<div id="area_game">
+
+		<table id="area_enemy" class="area_game__table" border="0" cellspacing="0">
+
+      <thead>
+        <tr>
+          <td></td>
+          <td><p>0</p></td>
+          <td><p>1</p></td>
+          <td><p>2</p></td>
+          <td><p>3</p></td>
+          <td><p>4</p></td>
+          <td><p>5</p></td>
+          <td><p>6</p></td>
+          <td><p>7</p></td>
+          <td><p>8</p></td>
+          <td><p>9</p></td>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><p>A</p></td>
+          <td id="00"></td>
+          <td id="01"></td>
+          <td id="02"></td>
+          <td id="03"></td>
+          <td id="04"></td>
+          <td id="05"></td>
+          <td id="06"></td>
+          <td id="07"></td>
+          <td id="08"></td>
+          <td id="09"></td>
+        </tr>
+        <tr>
+          <td><p>B</p></td>
+          <td id="10"></td>
+          <td id="11"></td>
+          <td id="12"></td>
+          <td id="13"></td>
+          <td id="14"></td>
+          <td id="15"></td>
+          <td id="16"></td>
+          <td id="17"></td>
+          <td id="18"></td>
+          <td id="19"></td>
+        </tr>
+        <tr>
+          <td><p>C</p></td>
+          <td id="20"></td>
+          <td id="21"></td>
+          <td id="22"></td>
+          <td id="23"></td>
+          <td id="24"></td>
+          <td id="25"></td>
+          <td id="26"></td>
+          <td id="27"></td>
+          <td id="28"></td>
+          <td id="29"></td>
+        </tr>
+        <tr>
+          <td><p>D</p></td>
+          <td id="30"></td>
+          <td id="31"></td>
+          <td id="32"></td>
+          <td id="33"></td>
+          <td id="34"></td>
+          <td id="35"></td>
+          <td id="36"></td>
+          <td id="37"></td>
+          <td id="38"></td>
+          <td id="39"></td>
+        </tr>
+        <tr>
+          <td><p>E</p></td>
+          <td id="40"></td>
+          <td id="41"></td>
+          <td id="42"></td>
+          <td id="43"></td>
+          <td id="44"></td>
+          <td id="45"></td>
+          <td id="46"></td>
+          <td id="47"></td>
+          <td id="48"></td>
+          <td id="49"></td>
+        </tr>
+        <tr>
+          <td><p>F</p></td>
+          <td id="50"></td>
+          <td id="51"></td>
+          <td id="52"></td>
+          <td id="53"></td>
+          <td id="54"></td>
+          <td id="55"></td>
+          <td id="56"></td>
+          <td id="57"></td>
+          <td id="58"></td>
+          <td id="59"></td>
+        </tr>
+        <tr>
+          <td><p>G</p></td>
+          <td id="60"></td>
+          <td id="61"></td>
+          <td id="62"></td>
+          <td id="63"></td>
+          <td id="64"></td>
+          <td id="65"></td>
+          <td id="66"></td>
+          <td id="67"></td>
+          <td id="68"></td>
+          <td id="69"></td>
+        </tr>
+        <tr>
+          <td><p>H</p></td>
+          <td id="70"></td>
+          <td id="71"></td>
+          <td id="72"></td>
+          <td id="73"></td>
+          <td id="74"></td>
+          <td id="75"></td>
+          <td id="76"></td>
+          <td id="77"></td>
+          <td id="78"></td>
+          <td id="79"></td>
+        </tr>
+        <tr>
+          <td><p>I</p></td>
+          <td id="80"></td>
+          <td id="81"></td>
+          <td id="82"></td>
+          <td id="83"></td>
+          <td id="84"></td>
+          <td id="85"></td>
+          <td id="86"></td>
+          <td id="87"></td>
+          <td id="88"></td>
+          <td id="89"></td>
+        </tr>
+        <tr>
+          <td><p>J</p></td>
+          <td id="90"></td>
+          <td id="91"></td>
+          <td id="92"></td>
+          <td id="93"></td>
+          <td id="94"></td>
+          <td id="95"></td>
+          <td id="96"></td>
+          <td id="97"></td>
+          <td id="98"></td>
+          <td id="99"></td>
+        </tr>
+			</tbody>
+
+		</table>
+
+    <table id="area_home" class="area_game__table" border="0" cellspacing="0">
+
+    			<thead>
+    				<tr>
+    					<td></td>
+    					<td><p>0</p></td>
+    					<td><p>1</p></td>
+    					<td><p>2</p></td>
+    					<td><p>3</p></td>
+    					<td><p>4</p></td>
+    					<td><p>5</p></td>
+    					<td><p>6</p></td>
+    					<td><p>7</p></td>
+    					<td><p>8</p></td>
+    					<td><p>9</p></td>
+    				</tr>
+    			</thead>
+
+    			<tbody>
+    				<tr>
+    					<td><p>A</p></td>
+    					<td id="h_00"></td>
+    					<td id="h_01"></td>
+    					<td id="h_02"></td>
+    					<td id="h_03"></td>
+    					<td id="h_04"></td>
+    					<td id="h_05"></td>
+    					<td id="h_06"></td>
+    					<td id="h_07"></td>
+    					<td id="h_08"></td>
+    					<td id="h_09"></td>
+    				</tr>
+    				<tr>
+    					<td><p>B</p></td>
+    					<td id="h_10"></td>
+    					<td id="h_11"></td>
+    					<td id="h_12"></td>
+    					<td id="h_13"></td>
+    					<td id="h_14"></td>
+    					<td id="h_15"></td>
+    					<td id="h_16"></td>
+    					<td id="h_17"></td>
+    					<td id="h_18"></td>
+    					<td id="h_19"></td>
+    				</tr>
+    				<tr>
+    					<td><p>C</p></td>
+    					<td id="h_20"></td>
+    					<td id="h_21"></td>
+    					<td id="h_22"></td>
+    					<td id="h_23"></td>
+    					<td id="h_24"></td>
+    					<td id="h_25"></td>
+    					<td id="h_26"></td>
+    					<td id="h_27"></td>
+    					<td id="h_28"></td>
+    					<td id="h_29"></td>
+    				</tr>
+    				<tr>
+    					<td><p>D</p></td>
+    					<td id="h_30"></td>
+    					<td id="h_31"></td>
+    					<td id="h_32"></td>
+    					<td id="h_33"></td>
+    					<td id="h_34"></td>
+    					<td id="h_35"></td>
+    					<td id="h_36"></td>
+    					<td id="h_37"></td>
+    					<td id="h_38"></td>
+    					<td id="h_39"></td>
+    				</tr>
+    				<tr>
+    					<td><p>E</p></td>
+    					<td id="h_40"></td>
+    					<td id="h_41"></td>
+    					<td id="h_42"></td>
+    					<td id="h_43"></td>
+    					<td id="h_44"></td>
+    					<td id="h_45"></td>
+    					<td id="h_46"></td>
+    					<td id="h_47"></td>
+    					<td id="h_48"></td>
+    					<td id="h_49"></td>
+    				</tr>
+    				<tr>
+    					<td><p>F</p></td>
+    					<td id="h_50"></td>
+    					<td id="h_51"></td>
+    					<td id="h_52"></td>
+    					<td id="h_53"></td>
+    					<td id="h_54"></td>
+    					<td id="h_55"></td>
+    					<td id="h_56"></td>
+    					<td id="h_57"></td>
+    					<td id="h_58"></td>
+    					<td id="h_59"></td>
+    				</tr>
+    				<tr>
+    					<td><p>G</p></td>
+    					<td id="h_60"></td>
+    					<td id="h_61"></td>
+    					<td id="h_62"></td>
+    					<td id="h_63"></td>
+    					<td id="h_64"></td>
+    					<td id="h_65"></td>
+    					<td id="h_66"></td>
+    					<td id="h_67"></td>
+    					<td id="h_68"></td>
+    					<td id="h_69"></td>
+    				</tr>
+    				<tr>
+    					<td><p>H</p></td>
+    					<td id="h_70"></td>
+    					<td id="h_71"></td>
+    					<td id="h_72"></td>
+    					<td id="h_73"></td>
+    					<td id="h_74"></td>
+    					<td id="h_75"></td>
+    					<td id="h_76"></td>
+    					<td id="h_77"></td>
+    					<td id="h_78"></td>
+    					<td id="h_79"></td>
+    				</tr>
+    				<tr>
+    					<td><p>I</p></td>
+    					<td id="h_80"></td>
+    					<td id="h_81"></td>
+    					<td id="h_82"></td>
+    					<td id="h_83"></td>
+    					<td id="h_84"></td>
+    					<td id="h_85"></td>
+    					<td id="h_86"></td>
+    					<td id="h_87"></td>
+    					<td id="h_88"></td>
+    					<td id="h_89"></td>
+    				</tr>
+    				<tr>
+    					<td><p>J</p></td>
+    					<td id="h_90"></td>
+    					<td id="h_91"></td>
+    					<td id="h_92"></td>
+    					<td id="h_93"></td>
+    					<td id="h_94"></td>
+    					<td id="h_95"></td>
+    					<td id="h_96"></td>
+    					<td id="h_97"></td>
+    					<td id="h_98"></td>
+    					<td id="h_99"></td>
+    				</tr>
+    			</tbody>
+
+    		</table>
+</div>
+  </body>
+  <script src="main.js" charset="utf-8"></script>
+</html>

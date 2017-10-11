@@ -1,6 +1,6 @@
 var port = 3000;
 var socket = io.connect('http://localhost:' + port);
-
+var userId = null;
 var view = {
   showShip: function (player, id, color) {
     var elShip = document.getElementById(id);
@@ -12,7 +12,10 @@ var view = {
   }
 };
 
+var Ships = [];
+
 var model = {
+  click: true,
   sizeSpace: 10,
   numShips: 10,
   numOneShips: {
@@ -95,46 +98,55 @@ var model = {
 };
 
 var controller = {
-  createShips: function () {
-    for (floor in model.numOneShips) {
-      model.createSpaceships(floor, model.numOneShips[floor]);
-    }
-  },
-
   shotShip: function (c) {
-    var id = this.convertToID(c);
-    if (id) {
-      socket.emit('checkShot', id);
+    var data = {
+      'c': c,
+      'userId': userId
     }
+    socket.emit('checkShot', data);
+  },
+  checkShot: function (c) {
+    var data = {
+      'c': c.c,
+      'userId': userId
+    }
+    socket.emit('recheckShot', data);
   },
 
-  recheckShot: function (id) {
-    var id = 'h_' + id;
-    var loss = model.shot(id);
+  recheckShot: function (loss) {
     if (loss.status === 1) {
-      view.showShip("area_home", "h_" + loss.id, "ship-red");
+      view.showShip("area_home", loss.id, "ship-red");
     } else if (typeof (loss) == 'string') {
-      view.showBomb(loss);
+      view.showBomb(loss.split('_')[1]);
     }
-    socket.emit('shot', loss);
-    if (model.destroyShips === model.countShips) {
-      socket.emit('wasted', model.destroyShips);
-      alert("Wasted!");
+    var data = {
+      'loss': loss,
+      'userId': userId
     }
+    socket.emit('shot', data);
+  },
+
+  getId: function () {
+    var data = {
+      'userId': userId
+    }
+    socket.emit('getId', data);
   },
 
   reShot: function (loss) {
     if (loss.status === 1) {
-      view.showShip("area_enemy", loss.id, "ship-red");
+      view.showShip("area_enemy", "h_" + loss.id, "ship-red");
     } else if (typeof (loss) == 'string') {
-      view.showBomb(loss.split('_')[1]);
+      view.showBomb(loss);
     }
   },
 
   wasted: function functionName(data) {
-    if (data === model.countShips) {
-      alert("Victory!");
-    }
+    alert("Wasted!");
+  },
+
+  victory: function functionName(data) {
+    alert("Victory!");
   },
 
   convertToID: function (c) {
@@ -166,6 +178,7 @@ var controller = {
     el.onmouseover = function (e) {
       e = e || window.event;
       if (e.target.id !== "") {
+        // if(model.click == true){
         e.target.style.transition = "0.5s";
         e.target.style.backgroundColor = "rgba(104, 142, 218, 0.33)";
         e.target.onclick = function () {
@@ -173,6 +186,7 @@ var controller = {
           controller.shotShip(c)
         };
       }
+      // }
     };
     el.onmouseout = function (e) {
       e = e || window.event;
@@ -199,7 +213,6 @@ var controller = {
   var start = {
     init: function () {
       this.main();
-      this.control();
       this.event();
     },
     main: function () {
@@ -209,14 +222,12 @@ var controller = {
         $('input').val(null);
       });
     },
-    control: function () {
-      controller.createShips();
-      controller.createDataTitle();
-    },
     event: function () {
       socket.on('userName', function (data) {
         console.log('You\'r username is => ' + data.name);
         $('textarea').val($('textarea').val() + 'You\'r username => ' + data.name + '\n' + 'You\'r socketId => ' + data.socketId + '\n');
+        userId = data.socketId;
+        socket.emit('getShips', data.socketId);
       });
       socket.on('newUser', function (userName) {
         console.log('New user has been connected to chat | ' + userName);
@@ -226,6 +237,35 @@ var controller = {
       socket.on('messageToAponent', function (data) {
         console.log(data.name + ' | => ' + data.msg + ' - time: ' + data.time);
         $('textarea').val($('textarea').val() + data.name + ' : ' + data.msg + ' - ' + data.time + '\n');
+      });
+
+      socket.on('Ships', function (data) {
+        var ships = data.ships;
+        for (var i = 0, len = ships.length; i < len; i++) {
+          var ship = ships[i].position;
+          for (p in ship) {
+            view.showShip("area_home", ship[p], "ship-blue");
+          }
+        }
+        (function createDataTitle() {
+          var elCell = document.getElementsByTagName("td");
+          for (var i = 0; i < elCell.length; i++) {
+            if (elCell[i].id !== "") {
+              var value = elCell[i].getAttribute("id");
+              var element = elCell[i];
+              var letter = element.parentNode.firstElementChild.firstElementChild.innerHTML;
+              elCell[i].setAttribute("data-title", letter + value.charAt(1));
+            }
+          };
+        })();
+      });
+
+      socket.on('checkShot', function (data) {
+        controller.checkShot(data);
+      });
+
+      socket.on('getId', function (data) {
+        controller.getId(data);
       });
 
       socket.on('recheckShot', function (data) {
@@ -238,6 +278,10 @@ var controller = {
 
       socket.on('wasted', function (data) {
         controller.wasted(data);
+      });
+
+      socket.on('victory', function (data) {
+        controller.victory(data);
       });
 
       controller.hoverClick("area_enemy");

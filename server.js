@@ -38,7 +38,6 @@ function createGame(socket) {
       4: 1
     };
   createShips();
-  console.log(Ships[socket.id]);
   socket.broadcast.emit('newUser', name);
   socket.emit('userName', {
     'name': name,

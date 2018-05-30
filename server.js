@@ -1,12 +1,12 @@
-var express = require('express');
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var log4js = require('log4js');
-var logger = log4js.getLogger();
-var port = 3000;
-var people = {};
-var connectCounter = 0;
+constexpress = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const log4js = require('log4js');
+const logger = log4js.getLogger();
+const port = 3000;
+let people = {};
+let connectCounter = 0;
 logger.level = 'debug';
 logger.debug('Script has been started...');
 server.listen(port);
@@ -20,7 +20,7 @@ io.on('connection', function (socket) {
 });
 
 function createGame(socket) {
-  var name = 'U' + (socket.id).toString().substr(1, 4);
+  let name = 'U' + (socket.id).toString().substr(1, 4);
   connectCounter = io.engine.clientsCount;
   socket.broadcast.emit('newUser', name);
   socket.emit('userName', {
@@ -32,7 +32,7 @@ function createGame(socket) {
     logger.warn('-----------');
     logger.warn('User: ' + name + ' | Message: ' + msg);
     logger.warn('====> Sending message to other chater...');
-    var time = (new Date).toLocaleTimeString();
+    let time = (new Date).toLocaleTimeString();
     io.sockets.emit('messageToAponent', {
       'time': time,
       'msg': msg,

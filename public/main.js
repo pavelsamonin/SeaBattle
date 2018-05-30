@@ -1,18 +1,18 @@
-var port = 3000;
-var socket = io.connect('http://localhost:' + port);
+const port = 3000;
+const socket = io.connect('http://localhost:' + port);
 
-var view = {
+let view = {
   showShip: function (player, id, color) {
-    var elShip = document.getElementById(id);
+    let elShip = document.getElementById(id);
     elShip.setAttribute("class", color);
   },
   showBomb: function (id) {
-    var elBomb = document.getElementById(id);
+    let elBomb = document.getElementById(id);
     elBomb.setAttribute("class", "bomb");
   }
 };
 
-var model = {
+let model = {
   sizeSpace: 10,
   numShips: 10,
   numOneShips: {
@@ -25,9 +25,9 @@ var model = {
   countShips: 20,
   spaceships: [],
   shot: function (id) {
-    for (var i = 0; i < this.numShips; i++) {
-      var spaceship = this.spaceships[i];
-      var posDamage = spaceship.position.indexOf(id);
+    for (let i = 0; i < this.numShips; i++) {
+      let spaceship = this.spaceships[i];
+      let posDamage = spaceship.position.indexOf(id);
       if (posDamage >= 0) {
         this.destroyShips++;
         return {
@@ -40,10 +40,10 @@ var model = {
   },
 
   createShipPos: function (floor) {
-    var col = 0;
-    var row = 0;
-    var location = Math.floor(Math.random() * 2);
-    var shipPosition = [];
+    let col = 0;
+    let row = 0;
+    let location = Math.floor(Math.random() * 2);
+    let shipPosition = [];
 
     if (location === 1) { // horizontal
       row = Math.floor(Math.random() * this.sizeSpace);
@@ -53,7 +53,7 @@ var model = {
       col = Math.floor(Math.random() * this.sizeSpace);
     }
 
-    for (var i = 0; i < floor; i++) {
+    for (let i = 0; i < floor; i++) {
       if (location === 1) {
         shipPosition.push("h_" + row + "" + (col + i));
       } else {
@@ -64,9 +64,9 @@ var model = {
   },
 
   checkRepeatsPos: function (position, floor, num) {
-    for (var s = 0; s < this.spaceships.length; s++) {
-      var spaceship = this.spaceships[s];
-      for (var j = 0; j < position.length; j++) {
+    for (let s = 0; s < this.spaceships.length; s++) {
+      let spaceship = this.spaceships[s];
+      for (let j = 0; j < position.length; j++) {
         if (typeof (spaceship) != 'undefined') {
           if (spaceship.position.indexOf(position[j]) >= 0) {
             return true;
@@ -78,8 +78,8 @@ var model = {
   },
 
   createSpaceships: function (floor, num) {
-    var position;
-    for (var i = 0; i < num; i++) {
+    let position;
+    for (let i = 0; i < num; i++) {
       do {
         position = this.createShipPos(floor);
       } while (this.checkRepeatsPos(position, floor, num));
@@ -94,7 +94,7 @@ var model = {
   }
 };
 
-var controller = {
+let controller = {
   createShips: function () {
     for (floor in model.numOneShips) {
       model.createSpaceships(floor, model.numOneShips[floor]);
@@ -102,15 +102,15 @@ var controller = {
   },
 
   shotShip: function (c) {
-    var id = this.convertToID(c);
+    let id = this.convertToID(c);
     if (id) {
       socket.emit('checkShot', id);
     }
   },
 
   recheckShot: function (id) {
-    var id = 'h_' + id;
-    var loss = model.shot(id);
+    let id = 'h_' + id;
+    let loss = model.shot(id);
     if (loss.status === 1) {
       view.showShip("area_home", "h_" + loss.id, "ship-red");
     } else if (typeof (loss) == 'string') {
@@ -138,11 +138,11 @@ var controller = {
   },
 
   convertToID: function (c) {
-    var symbol = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    let symbol = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
     if (c !== null && c.length === 2) {
-      var firstChar = c.charAt(0);
-      var row = symbol.indexOf(firstChar);
-      var col = c.charAt(1);
+      let firstChar = c.charAt(0);
+      let row = symbol.indexOf(firstChar);
+      let col = c.charAt(1);
       if (!this.isNumeric(row) || !this.isNumeric(col)) {
         alert("Not Numeric!");
       } else if (row < 0 || row >= model.sizeSpace ||
@@ -162,14 +162,14 @@ var controller = {
   },
 
   hoverClick: function (id) {
-    var el = document.getElementById(id);
+    let el = document.getElementById(id);
     el.onmouseover = function (e) {
       e = e || window.event;
       if (e.target.id !== "") {
         e.target.style.transition = "0.5s";
         e.target.style.backgroundColor = "rgba(104, 142, 218, 0.33)";
         e.target.onclick = function () {
-          var c = this.getAttribute("data-title");
+          let c = this.getAttribute("data-title");
           controller.shotShip(c)
         };
       }
@@ -183,12 +183,12 @@ var controller = {
   },
 
   createDataTitle: function () {
-    var elCell = document.getElementsByTagName("td");
-    for (var i = 0; i < elCell.length; i++) {
+    let elCell = document.getElementsByTagName("td");
+    for (let i = 0; i < elCell.length; i++) {
       if (elCell[i].id !== "") {
-        var value = elCell[i].getAttribute("id");
-        var element = elCell[i];
-        var letter = element.parentNode.firstElementChild.firstElementChild.innerHTML;
+        let value = elCell[i].getAttribute("id");
+        let element = elCell[i];
+        let letter = element.parentNode.firstElementChild.firstElementChild.innerHTML;
         elCell[i].setAttribute("data-title", letter + value.charAt(1));
       }
     };
@@ -196,7 +196,7 @@ var controller = {
 };
 
 (function () {
-  var start = {
+  let start = {
     init: function () {
       this.main();
       this.control();
@@ -204,7 +204,7 @@ var controller = {
     },
     main: function () {
       $(document).on('click', 'button', function () {
-        var message = $('input').val();
+        let message = $('input').val();
         socket.emit('message', message);
         $('input').val(null);
       });

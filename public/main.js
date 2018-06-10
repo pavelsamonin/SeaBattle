@@ -109,7 +109,7 @@ let controller = {
   },
 
   recheckShot: function (id) {
-    let id = 'h_' + id;
+    id = 'h_' + id;
     let loss = model.shot(id);
     if (loss.status === 1) {
       view.showShip("area_home", "h_" + loss.id, "ship-red");
